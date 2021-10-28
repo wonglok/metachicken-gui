@@ -45,7 +45,7 @@ export let getPages = () => {
       placeID: `simulation`,
       slug: `/place/simulation`,
       title: "Thank you Jesus - Particle Simulation",
-      thumbnail: `${SiteBaseURL}/preview/simulation-thumb.png`,
+      thumbnail: `${SiteBaseURL}/preview/oval.png`,
       compo: dynamic(() => import("./simulation/SimPage.js"), {
         ssr: false,
       }),
@@ -54,8 +54,17 @@ export let getPages = () => {
       placeID: `magnet`,
       slug: `/place/magnet`,
       title: "Thank you Jesus - Line Magnet",
-      thumbnail: `${SiteBaseURL}/preview/simulation-thumb.png`,
+      thumbnail: `${SiteBaseURL}/preview/oval.png`,
       compo: dynamic(() => import("./magnet/Magnet.js"), {
+        ssr: false,
+      }),
+    },
+    {
+      placeID: `metachicken`,
+      slug: `/place/metachicken`,
+      title: "Metachicken",
+      thumbnail: `${SiteBaseURL}/preview/oval.png`,
+      compo: dynamic(() => import("./metachicken/Metachicken.js"), {
         ssr: false,
       }),
     },
@@ -77,6 +86,13 @@ export let getMyFreinds = async () => {
     type: "starlink",
     title: `Metaverse Church`,
     url: `https://metaverse.thankyou.church/api/starlink`,
+  });
+
+  list.push({
+    id: md5(`https://metachicken.elife.fun/api/starlink`),
+    type: "starlink",
+    title: `Metachicken`,
+    url: `https://metachicken.elife.fun/api/starlink`,
   });
 
   return list;
