@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import md5 from "md5";
 
-export let SiteBaseURL = "https://metaverse.effectnode.com";
+export let SiteBaseURL = "https://metachicken.elife.fun";
 
 export let getPages = () => {
   return [

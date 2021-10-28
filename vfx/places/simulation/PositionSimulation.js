@@ -365,8 +365,9 @@ export class PositionSimulation {
         #include <common>
 
         bool detectReset (vec3 position) {
-          return length(position) >= 30.0;
+          return position.y <= -2.0;
 
+          // return length(position) >= 30.0;
           // return mod(time, 20.0) < 0.01;
         }
       `;

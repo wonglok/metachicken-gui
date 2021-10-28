@@ -418,6 +418,7 @@ export class LokLokWiggleDisplay {
     });
 
     let line0 = new Mesh(geometry, matLine0);
+    line0.frustumCulled = false;
 
     this.o3d.add(line0);
     node.onClean(() => {
@@ -582,6 +583,7 @@ export class FunSim {
     this.influences = influences;
     this.cursorPointer = cursorPointer;
     this.o3d = new Object3D();
+    this.o3d.frustumCulled = false;
     this.node = node;
     this.howManyTrackers = howManyTrackers;
     this.tailLength = tailLength;
