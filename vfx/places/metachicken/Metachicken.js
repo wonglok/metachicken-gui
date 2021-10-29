@@ -6,6 +6,8 @@ import { Starter } from "../../canvas/Starter/Starter";
 import { Assets, AQ } from "./Assets";
 import {
   AxesHelper,
+  InstancedMesh,
+  Matrix4,
   Mesh,
   MeshBasicMaterial,
   Object3D,
@@ -31,26 +33,32 @@ import { CabinControls } from "../../canvas/Controls/CabinControls";
 import { CabinVisual } from "./CabinVisual";
 import { TrackO3D } from "../fly/TrackO3D";
 
+const CHICKEN_COUNT = 256;
+
 export default function Metachicken() {
   let o3d = new Object3D();
-  let trackers = useMemo(() => {
+  let { trackers } = useMemo(() => {
     o3d.children.forEach((e) => {
       o3d.remove(e);
     });
     let list = [];
 
-    for (let i = 0; i < 512; i++) {
+    for (let i = 0; i < CHICKEN_COUNT; i++) {
       let o = new Object3D();
+      o.name = "chick" + i;
       o.position.x = Math.random() - 0.5;
       o.position.y = Math.random() - 0.5;
       o.position.z = Math.random() - 0.5;
       o.position.multiplyScalar(50);
-      o.position.z += -35;
+
+      o.userData.lerp = Math.random();
+      o.userData.oPos = o.position.clone();
+      o.scale.setScalar(0.5);
       o3d.add(o);
       list.push(o);
     }
 
-    return list;
+    return { trackers: list };
   }, [o3d]);
 
   return (
@@ -63,11 +71,17 @@ export default function Metachicken() {
             <group name={"place"}>
               <CabinVisual></CabinVisual>
             </group>
-            <group position={[0, 0, 0]} name={"dots"}>
-              <primitive object={o3d} />
-            </group>
+
+            <group name="chickensCentral" position={[0, 0, -30]}></group>
           </CabinControls>
 
+          <group position={[0, 0, 0]} name={"dots"}>
+            <primitive object={o3d} />
+          </group>
+
+          <Suspense fallback={null}>
+            <ChickenPlacement trackers={trackers}></ChickenPlacement>
+          </Suspense>
           <TrackerFly trackers={trackers}></TrackerFly>
           {/* <FunSimCom></FunSimCom> */}
 
@@ -83,6 +97,65 @@ export default function Metachicken() {
         </Preload>
       </Starter>
     </div>
+  );
+}
+
+function ChickenPlacement({ trackers }) {
+  // let chick = `/objects/spacechicken/chicken-space-suit.glb`;
+  let group = useRef();
+  // let gltf = useGLTF(chick);
+  const { nodes, materials } = useGLTF(
+    "/objects/spacechicken/chicken-merged-mesh.glb"
+  );
+
+  let v3 = new Vector3();
+  useFrame(({ camera, scene }) => {
+    if (group.current) {
+      /** @type {InstancedMesh} */
+      let body = group.current.getObjectByName("body");
+      /** @type {InstancedMesh} */
+      let red = group.current.getObjectByName("red");
+      /** @type {InstancedMesh} */
+      let yellow = group.current.getObjectByName("yellow");
+
+      let chickensCentral = scene.getObjectByName("chickensCentral");
+
+      if (chickensCentral) {
+        trackers.forEach((tt, idx) => {
+          chickensCentral.getWorldPosition(v3);
+          v3.add(tt.userData.oPos);
+
+          tt.rotation.y = camera.rotation.y;
+
+          tt.position.lerp(v3, tt.userData.lerp);
+
+          body.setMatrixAt(idx, tt.matrix);
+          red.setMatrixAt(idx, tt.matrix);
+          yellow.setMatrixAt(idx, tt.matrix);
+
+          body.instanceMatrix.needsUpdate = true;
+          red.instanceMatrix.needsUpdate = true;
+          yellow.instanceMatrix.needsUpdate = true;
+        });
+      }
+    }
+  });
+
+  return (
+    <group ref={group}>
+      <instancedMesh
+        name="body"
+        args={[nodes.Mesh_0.geometry, materials.body, CHICKEN_COUNT]}
+      />
+      <instancedMesh
+        name="red"
+        args={[nodes.Mesh_0_1.geometry, materials.red, CHICKEN_COUNT]}
+      />
+      <instancedMesh
+        name="yellow"
+        args={[nodes.Mesh_0_2.geometry, materials.yellow, CHICKEN_COUNT]}
+      />
+    </group>
   );
 }
 
@@ -113,7 +186,7 @@ function TrackerFly({ trackers }) {
   }, [trackers, trackers.length]);
 
   useFrame(() => {
-    sim.track({ trackers, lerp: 0.5 });
+    sim.track({ trackers, lerp: 0.4 });
   });
 
   return (
