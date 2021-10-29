@@ -73,7 +73,7 @@ export default function Metachicken() {
 
             <group
               name={"place"}
-              position={[0, -0.0, 0.1]}
+              position={[0, 0.02, 0]}
               rotation={[-0.09 * Math.PI, 0, 0]}
             >
               <CabinVisual></CabinVisual>
