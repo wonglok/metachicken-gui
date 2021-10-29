@@ -13,7 +13,7 @@ export function CabinControls({ children, Now, envMap, higherCamera = 1.3 }) {
   //   camera.position.x = Now.avatarAt.x;
   //   camera.position.y = Now.avatarAt.y + higherCamera;
   //   camera.position.z = Now.avatarAt.z;
-  // });
+  //
 
   return (
     <group>
@@ -71,6 +71,40 @@ function DragOrbit({ onRotation }) {
 
 function Keyboard({ camera }) {
   let { get } = useThree();
+
+  useEffect(() => {
+    //
+    let dom = document.createElement("div");
+    dom.innerHTML = "GAS!";
+    dom.style.cssText = `
+
+      position: absolute;
+      zIndex: 1000;
+      bottom: 15px;
+      left: 15px;
+      background: white;
+      height: 100px;
+      width: 100px;
+      line-height: 100px;
+      text-align: center;
+      border-radius: 50%;
+      user-select: none;
+      touch-action: none;
+    `;
+
+    dom.onpointerdown = () => {
+      Now.keyW = true;
+    };
+    dom.onpointerup = () => {
+      Now.keyW = false;
+    };
+
+    get().gl.domElement.parentElement.appendChild(dom);
+    return () => {
+      get().gl.domElement.parentElement.removeChild(dom);
+    };
+  }, []);
+
   //
   useAutoEvent("keydown", (ev) => {
     // console.log(ev.key);

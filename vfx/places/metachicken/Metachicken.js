@@ -62,16 +62,19 @@ export default function Metachicken() {
   }, [o3d]);
 
   return (
-    <div className="h-full w-full">
-      <Starter>
+    <div
+      className="h-full w-full"
+      style={{ userSelect: "none", touchAction: "none" }}
+    >
+      <Starter reducedMaxDPI={2}>
         <Preload Assets={Assets}>
           <CabinControls Now={Now} higherCamera={2.0}>
             <pointLight intensity={30} position={[0, 1, 0]} />
 
             <group
               name={"place"}
-              position={[0, -0.15, 0.1]}
-              rotation={[-0.05 * Math.PI, 0, 0]}
+              position={[0, -0.0, 0.1]}
+              rotation={[-0.09 * Math.PI, 0, 0]}
             >
               <CabinVisual></CabinVisual>
             </group>
@@ -129,7 +132,7 @@ function ChickenPlacement({ trackers }) {
           chickensCentral.getWorldPosition(v3);
           v3.add(tt.userData.oPos);
 
-          tt.position.lerp(v3, 0.03 + 0.01 * tt.userData.lerp);
+          tt.position.lerp(v3, 0.015);
 
           tt.lookAt(v3.x, v3.y, v3.z);
 
@@ -183,11 +186,14 @@ function AutoSky() {
 function TrackerFly({ trackers }) {
   let { mini } = useMiniEngine();
 
+  let near = (aSize) => {
+    return Math.pow(2, Math.ceil(Math.log(aSize) / Math.log(2)));
+  };
   let sim = useMemo(() => {
     return new TrackO3D({
       node: mini,
       tailLength: 128, // 512, 1024
-      howManyTrackers: trackers.length,
+      howManyTrackers: near(trackers.length),
     });
   }, [trackers, trackers.length]);
 
