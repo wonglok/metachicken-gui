@@ -125,9 +125,10 @@ function ChickenPlacement({ trackers }) {
           chickensCentral.getWorldPosition(v3);
           v3.add(tt.userData.oPos);
 
-          tt.rotation.y = camera.rotation.y;
+          tt.position.lerp(v3, 0.03);
 
-          tt.position.lerp(v3, tt.userData.lerp);
+          tt.lookAt(v3);
+          tt.rotation.y += Math.PI;
 
           body.setMatrixAt(idx, tt.matrix);
           red.setMatrixAt(idx, tt.matrix);
@@ -186,7 +187,7 @@ function TrackerFly({ trackers }) {
   }, [trackers, trackers.length]);
 
   useFrame(() => {
-    sim.track({ trackers, lerp: 0.4 });
+    sim.track({ trackers, lerp: 0.15 });
   });
 
   return (
