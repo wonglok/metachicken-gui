@@ -143,7 +143,7 @@ function ChickenPlacement({ trackers }) {
 
           tt.position.lerp(v3, 0.015 * tt.userData.lerp * 2.0);
 
-          v3.multiplyScalar(1.5);
+          v3.multiplyScalar(2);
           tt.lookAt(v3.x, v3.y, v3.z);
 
           //

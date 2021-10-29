@@ -1,4 +1,4 @@
-import React, { useRef, Suspense } from "react";
+import React, { useRef, Suspense, useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Object3D, Camera } from "three";
@@ -60,6 +60,7 @@ export default function Cabin(props) {
       }
     }
   });
+
   return (
     <group ref={group} {...props} dispose={null}>
       <mesh
@@ -70,7 +71,6 @@ export default function Cabin(props) {
         material={nodes.cabin.material}
         position={[0, 0.96, -0.1]}
       />
-
       <mesh
         castShadow
         receiveShadow
@@ -79,7 +79,6 @@ export default function Cabin(props) {
         material={nodes.joystick.material}
         position={[0, 0.47, -0.59]}
       />
-
       <mesh
         castShadow
         receiveShadow
@@ -87,7 +86,6 @@ export default function Cabin(props) {
         material={nodes["fly-ctrl"].material}
         position={[0.48, 0.81, -0.94]}
       />
-
       <mesh
         castShadow
         receiveShadow
@@ -97,6 +95,15 @@ export default function Cabin(props) {
         geometry={nodes.screen.geometry}
         material={nodes.screen.material}
         position={[0, 0.96, -0.1]}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Cube.geometry}
+        material={materials.thecross}
+        position={[0.22, 1.06, -0.93]}
+        rotation={[-0.34, 0, 0]}
+        scale={[0.15, 0.15, 0.15]}
       />
     </group>
   );
