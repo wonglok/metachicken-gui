@@ -115,6 +115,12 @@ function ChickenPlacement({ trackers }) {
     "/objects/spacechicken/chicken-merged-mesh.glb"
   );
 
+  useEffect(() => {
+    nodes.Mesh_0.geometry.rotateY(Math.PI);
+    nodes.Mesh_0_1.geometry.rotateY(Math.PI);
+    nodes.Mesh_0_2.geometry.rotateY(Math.PI);
+  }, []);
+
   let v3 = new Vector3();
   useFrame(({ camera, scene }) => {
     if (group.current) {
@@ -132,11 +138,14 @@ function ChickenPlacement({ trackers }) {
           chickensCentral.getWorldPosition(v3);
           v3.add(tt.userData.oPos);
 
-          tt.position.lerp(v3, 0.015);
+          tt.position.lerp(v3, 0.015 * tt.userData.lerp * 2.0);
 
+          v3.multiplyScalar(1.1);
           tt.lookAt(v3.x, v3.y, v3.z);
 
-          tt.rotation.y += Math.PI;
+          //
+          // tt.lookAt(camera.position);
+          // tt.rotation.y += -1 * Math.PI;
 
           body.setMatrixAt(idx, tt.matrix);
           red.setMatrixAt(idx, tt.matrix);
