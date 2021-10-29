@@ -152,7 +152,7 @@ function Keyboard({ camera }) {
     }
   });
 
-  let scaler = 1;
+  let scaler = 1.5;
   let fakeCamPos = new Camera();
   fakeCamPos.position.copy(get().camera.position);
   let keyBoardForward = new Vector3();
