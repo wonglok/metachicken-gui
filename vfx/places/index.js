@@ -5,60 +5,60 @@ export let SiteBaseURL = "https://metachicken.elife.fun";
 
 export let getPages = () => {
   return [
-    {
-      placeID: `spaceship`,
-      slug: `/place/spaceship`,
-      title: "Spaceship",
-      thumbnail: `${SiteBaseURL}/preview/spaceship-thumb.png`,
-      compo: dynamic(() => import("./spaceship/SpaceStation"), {
-        ssr: false,
-      }),
-    },
-    {
-      placeID: `church`,
-      slug: `/place/church`,
-      title: "Thank you Church",
-      thumbnail: `${SiteBaseURL}/preview/church-thumb.png`,
-      compo: dynamic(() => import("./church/SkyCityChurch"), {
-        ssr: false,
-      }),
-    },
-    {
-      placeID: `sing`,
-      slug: `/place/sing`,
-      title: "Thank you Worship",
-      thumbnail: `${SiteBaseURL}/preview/sing-thumb.png`,
-      compo: dynamic(() => import("./sing/Sing"), {
-        ssr: false,
-      }),
-    },
-    {
-      placeID: `fly`,
-      slug: `/place/fly`,
-      title: "GLB to Lines",
-      thumbnail: `${SiteBaseURL}/preview/fly-thumb.png`,
-      compo: dynamic(() => import("./fly/Fly.js"), {
-        ssr: false,
-      }),
-    },
-    {
-      placeID: `simulation`,
-      slug: `/place/simulation`,
-      title: "Thank you Jesus - Particle Simulation",
-      thumbnail: `${SiteBaseURL}/preview/oval.png`,
-      compo: dynamic(() => import("./simulation/SimPage.js"), {
-        ssr: false,
-      }),
-    },
-    {
-      placeID: `magnet`,
-      slug: `/place/magnet`,
-      title: "Thank you Jesus - Line Magnet",
-      thumbnail: `${SiteBaseURL}/preview/oval.png`,
-      compo: dynamic(() => import("./magnet/Magnet.js"), {
-        ssr: false,
-      }),
-    },
+    // {
+    //   placeID: `spaceship`,
+    //   slug: `/place/spaceship`,
+    //   title: "Spaceship",
+    //   thumbnail: `${SiteBaseURL}/preview/spaceship-thumb.png`,
+    //   compo: dynamic(() => import("./spaceship/SpaceStation"), {
+    //     ssr: false,
+    //   }),
+    // },
+    // {
+    //   placeID: `church`,
+    //   slug: `/place/church`,
+    //   title: "Thank you Church",
+    //   thumbnail: `${SiteBaseURL}/preview/church-thumb.png`,
+    //   compo: dynamic(() => import("./church/SkyCityChurch"), {
+    //     ssr: false,
+    //   }),
+    // },
+    // {
+    //   placeID: `sing`,
+    //   slug: `/place/sing`,
+    //   title: "Thank you Worship",
+    //   thumbnail: `${SiteBaseURL}/preview/sing-thumb.png`,
+    //   compo: dynamic(() => import("./sing/Sing"), {
+    //     ssr: false,
+    //   }),
+    // },
+    // {
+    //   placeID: `fly`,
+    //   slug: `/place/fly`,
+    //   title: "GLB to Lines",
+    //   thumbnail: `${SiteBaseURL}/preview/fly-thumb.png`,
+    //   compo: dynamic(() => import("./fly/Fly.js"), {
+    //     ssr: false,
+    //   }),
+    // },
+    // {
+    //   placeID: `simulation`,
+    //   slug: `/place/simulation`,
+    //   title: "Thank you Jesus - Particle Simulation",
+    //   thumbnail: `${SiteBaseURL}/preview/oval.png`,
+    //   compo: dynamic(() => import("./simulation/SimPage.js"), {
+    //     ssr: false,
+    //   }),
+    // },
+    // {
+    //   placeID: `magnet`,
+    //   slug: `/place/magnet`,
+    //   title: "Thank you Jesus - Line Magnet",
+    //   thumbnail: `${SiteBaseURL}/preview/oval.png`,
+    //   compo: dynamic(() => import("./magnet/Magnet.js"), {
+    //     ssr: false,
+    //   }),
+    // },
     {
       placeID: `metachicken`,
       slug: `/place/metachicken`,

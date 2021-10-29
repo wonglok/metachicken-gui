@@ -56,7 +56,8 @@ export function useEnvLight() {
     {
       // textureBG: { value: tex },
     },
-    64
+    64,
+    50
   );
 
   useEffect(() => {

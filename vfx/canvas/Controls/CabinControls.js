@@ -30,7 +30,7 @@ export function CabinControls({ children, Now, envMap, higherCamera = 1.3 }) {
 
       <group>
         {/*  */}
-        {/*  */}
+
         {createPortal(
           <group position={[0, -1, 0]}>{children}</group>,
           get().camera
@@ -54,7 +54,6 @@ function DragOrbit({ onRotation }) {
     let orbit = new OrbitControls(cam, get().gl.domElement);
     orbit.enableDamping = true;
     orbit.dampingFactor = 0.93;
-
     ref.current.works = () => {
       //
       orbit.update();

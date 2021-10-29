@@ -1,7 +1,7 @@
 import { Sphere } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
-import { DoubleSide } from "three";
+import { BackSide, DoubleSide } from "three";
 
 export function StarSky() {
   let shaders = {
@@ -155,7 +155,7 @@ export function StarSky() {
         uniforms={uniforms.current}
         fragmentShader={shaders.fragmentShader}
         vertexShader={shaders.vertexShader}
-        side={DoubleSide}
+        side={BackSide}
       >
         {/*  */}
         {/*  */}

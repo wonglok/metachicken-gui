@@ -58,6 +58,7 @@ export class LokLokWiggleSimulation {
       );
       handTexture.needsUpdate = true;
 
+      let worldPositionOfTracker = new Vector3();
       return {
         texture: handTexture,
         update: ({ trackers, lerp = 1 }) => {
@@ -69,25 +70,28 @@ export class LokLokWiggleSimulation {
               tracker.userData.py = tracker.userData.py || 0;
               tracker.userData.pz = tracker.userData.pz || 0;
 
+              tracker.getWorldPosition(worldPositionOfTracker);
+
               //
-              tracker.userData.px = MathUtils.damp(
+              tracker.userData.px = MathUtils.lerp(
                 tracker.userData.px,
-                tracker.position.x,
-                lerp,
-                1 / 60
+                worldPositionOfTracker.x,
+                lerp
               );
-              tracker.userData.py = MathUtils.damp(
+              tracker.userData.py = MathUtils.lerp(
                 tracker.userData.py,
-                tracker.position.y,
-                lerp,
-                1 / 60
+                worldPositionOfTracker.y,
+                lerp
               );
-              tracker.userData.pz = MathUtils.damp(
+              tracker.userData.pz = MathUtils.lerp(
                 tracker.userData.pz,
-                tracker.position.z,
-                lerp,
-                1 / 60
+                worldPositionOfTracker.z,
+                lerp
               );
+
+              // tracker.userData.px = target.x;
+              // tracker.userData.py = target.y;
+              // tracker.userData.pz = target.z;
 
               handTexture.image.data[i * 3 + 0] = DataUtils.toHalfFloat(
                 tracker.userData.px
@@ -574,7 +578,7 @@ export class LokLokWiggleDisplay {
 
           vTColor = abs(getP3OfTex(0.5, offset.w) - getP3OfTex(0.6, offset.w));
 
-          vec2 volume = vec2(0.009, 0.009) * 20.0;
+          vec2 volume = vec2(0.009, 0.009) * 5.0;
           createTube(t, volume, transformed, objectNormal);
 
           vec3 transformedNormal = normalMatrix * objectNormal;
@@ -604,7 +608,7 @@ export class LokLokWiggleDisplay {
 
           // vec4 matcapColor = texture2D( matcap, uv );
 
-          gl_FragColor = vec4(vec3(vTColor), (1.0 - vT));
+          gl_FragColor = vec4(vec3(vTColor) + 0.5, (1.0 - vT));
         }
       `,
       transparent: true,
@@ -612,6 +616,7 @@ export class LokLokWiggleDisplay {
     });
 
     let line0 = new Mesh(geometry, matLine0);
+    line0.frustumCulled = false;
 
     this.o3d.add(line0);
     node.onClean(() => {

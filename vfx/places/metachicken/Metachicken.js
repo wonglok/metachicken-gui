@@ -29,8 +29,30 @@ import { useMiniEngine } from "../../utils/use-mini-engine";
 import { FunSim } from "../simulation/FunSim";
 import { CabinControls } from "../../canvas/Controls/CabinControls";
 import { CabinVisual } from "./CabinVisual";
+import { TrackO3D } from "../fly/TrackO3D";
 
 export default function Metachicken() {
+  let o3d = new Object3D();
+  let trackers = useMemo(() => {
+    o3d.children.forEach((e) => {
+      o3d.remove(e);
+    });
+    let list = [];
+
+    for (let i = 0; i < 512; i++) {
+      let o = new Object3D();
+      o.position.x = Math.random() - 0.5;
+      o.position.y = Math.random() - 0.5;
+      o.position.z = Math.random() - 0.5;
+      o.position.multiplyScalar(50);
+      o.position.z += -35;
+      o3d.add(o);
+      list.push(o);
+    }
+
+    return list;
+  }, [o3d]);
+
   return (
     <div className="h-full w-full">
       <Starter>
@@ -38,262 +60,154 @@ export default function Metachicken() {
           <CabinControls Now={Now} higherCamera={2.0}>
             <pointLight intensity={30} position={[0, 1, 0]} />
 
-            <CabinVisual></CabinVisual>
+            <group name={"place"}>
+              <CabinVisual></CabinVisual>
+            </group>
+            <group position={[0, 0, 0]} name={"dots"}>
+              <primitive object={o3d} />
+            </group>
           </CabinControls>
 
-          <FunSimCom></FunSimCom>
+          <TrackerFly trackers={trackers}></TrackerFly>
+          {/* <FunSimCom></FunSimCom> */}
 
           {/* <MapLoader></MapLoader> */}
           <SimpleBloomer></SimpleBloomer>
-          <StarSky></StarSky>
+
+          <gridHelper
+            position={[0, -15, 0]}
+            args={[1500, 50, "cyan", "cyan"]}
+          />
+
+          <AutoSky />
         </Preload>
       </Starter>
     </div>
   );
 }
 
-// function MapLoader() {
-//   return (
-//     <group>
-//       <Suspense fallback={null}>
-//         <MapContent></MapContent>
-//       </Suspense>
-//     </group>
-//   );
-// }
-
-// function MapContent() {
-//   let { get } = useThree();
-//   let gltf = useGLTF(AQ.floorMap.url);
-//   let { envMap } = useEnvLight();
-
-//   let floor = useMemo(() => {
-//     let floor = SkeletonUtils.clone(gltf.scene);
-//     // floor.rotation.y = Math.PI * 0.5;
-
-//     let startAt = floor.getObjectByName("startAt");
-//     if (startAt) {
-//       startAt.getWorldPosition(Now.startAt);
-//       startAt.getWorldPosition(Now.avatarAt);
-//       startAt.getWorldPosition(Now.goingTo);
-//       Now.goingTo.y += 1.3;
-//     }
-//     return floor;
-//   }, [gltf]);
-
-//   let colliderManager = useMemo(() => {
-//     return new ColliderManager({ floor, scene: get().scene });
-//   }, [floor]);
-
-//   let o3d = new Object3D();
-
-//   let metagraph = useRef();
-
-//   useEffect(() => {
-//     //
-//     //
-//     if (metagraph.current) {
-//       floor
-//         .getObjectByName("startAt")
-//         .getWorldPosition(metagraph.current.position);
-//       metagraph.current.position.x += -1;
-//       metagraph.current.position.y += 1.3;
-//       metagraph.current.position.z += -5;
-//       metagraph.current.scale.setScalar(0.03);
-//     }
-//     //
-//     //
-//   }, []);
-
-//   return (
-//     <group>
-//       <directionalLight intensity={3} position={[3, 3, 3]} />
-//       <primitive object={o3d}></primitive>
-//       {createPortal(<primitive object={floor}></primitive>, o3d)}
-
-//       {createPortal(
-//         <group visible={false}>
-//           <primitive object={colliderManager.preview}></primitive>
-//         </group>,
-//         o3d
-//       )}
-
-//       <PlayerCollider
-//         Now={Now}
-//         colliderMesh={colliderManager.collider}
-//       ></PlayerCollider>
-
-//       <PlayerDisplay
-//         lookBack={true}
-//         envMap={envMap}
-//         Now={Now}
-//         floor={floor}
-//         isSwim={true}
-//       ></PlayerDisplay>
-
-//       {/*
-//       <group ref={metagraph}>
-//         <ForceGraphR3F></ForceGraphR3F>
-//       </group> */}
-
-//       {/* <WalkerFollowerControls floor={floor}></WalkerFollowerControls> */}
-
-//
-//     </group>
-//   );
-// }
-
-//
-
-//
-
-//
-
-function FunSimCom() {
-  // let { get } = useThree();
-  let { mini, get } = useMiniEngine();
-
-  let cursorPointer = useMemo(() => {
-    return new Vector3();
-  }, []);
-
-  let sim = useMemo(() => {
-    return new FunSim({
-      cursorPointer: cursorPointer,
-      node: mini,
-      influences: [
-        {
-          type: `computeAttract`,
-          enabled: true,
-          needsUpdate: true,
-          mouse: true,
-          position: { x: 0, y: 0, z: 0 },
-          force: -40,
-          radius: 400,
-          min: -4.0,
-          max: 4.0,
-        },
-
-        {
-          type: `computeSphere`,
-          enabled: true,
-          mouse: true,
-          needsUpdate: true,
-          position: { x: 0, y: 0, z: 0 },
-          radius: 1000,
-          force: 50.0,
-          noise: 15.0,
-        },
-        // {
-        //   type: `computeSphere`,
-        //   enabled: true,
-        //   mouse: false,
-        //   needsUpdate: true,
-        //   position: { x: 0, y: 0, z: 0 },
-        //   radius: 1.5,
-        //   force: -30.0 * 1.3,
-        //   noise: 3.0,
-        // },
-        //
-        {
-          type: `computeGravity`,
-          enabled: true,
-          direction: { x: 0, y: -1, z: 0 },
-          force: 0.1,
-        },
-      ],
-      tailLength: 64, // 512, 1024
-      howManyTrackers: 2048,
-    });
-  }, [mini, cursorPointer]);
-
-  useFrame(({ camera }) => {
-    sim.track();
-
-    // sim.influences[1].position.x = camera.position.x * 0.0;
-    // sim.influences[1].position.y = camera.position.y * 1;
-    // sim.influences[1].position.z = camera.position.z * 0.0;
-    // sim.influences[1].needsUpdate = true;
-
-    sim.influences[0].position.x = camera.position.x;
-    sim.influences[0].position.y = camera.position.y;
-    sim.influences[0].position.z = camera.position.z;
-    sim.influences[0].needsUpdate = true;
-
-    cursorPointer.copy(camera.position);
+function AutoSky() {
+  useFrame(({ scene, camera }) => {
+    let starskyA = scene.getObjectByName("starskyA");
+    if (starskyA) {
+      starskyA.position.lerp(camera.position, 0.3);
+    }
   });
 
   return (
-    <group frustumCulled={false} position={[0, 0, 0]}>
-      {/* <OrbitDrei /> */}
-      {/* <Visualise influ={sim.influences} /> */}
-      <primitive object={sim.o3d}></primitive>
+    <group name="starskyA">
+      <StarSky></StarSky>
     </group>
   );
 }
 
-function Visualise({ influ }) {
-  let { mini, get } = useMiniEngine();
-  let ref = useRef();
+function TrackerFly({ trackers }) {
+  let { mini } = useMiniEngine();
+
+  let sim = useMemo(() => {
+    return new TrackO3D({
+      node: mini,
+      tailLength: 32, // 512, 1024
+      howManyTrackers: trackers.length,
+    });
+  }, [trackers, trackers.length]);
+
+  useFrame(() => {
+    sim.track({ trackers, lerp: 0.5 });
+  });
+
+  return (
+    <group>
+      <primitive object={sim.o3d} />
+    </group>
+  );
+}
+
+function MapLoader() {
+  return (
+    <group>
+      <Suspense fallback={null}>
+        <MapContent></MapContent>
+      </Suspense>
+    </group>
+  );
+}
+
+function MapContent() {
+  let { get } = useThree();
+  let gltf = useGLTF(AQ.floorMap.url);
+  let { envMap } = useEnvLight();
+
+  let floor = useMemo(() => {
+    let floor = SkeletonUtils.clone(gltf.scene);
+    // floor.rotation.y = Math.PI * 0.5;
+
+    let startAt = floor.getObjectByName("startAt");
+    if (startAt) {
+      startAt.getWorldPosition(Now.startAt);
+      startAt.getWorldPosition(Now.avatarAt);
+      startAt.getWorldPosition(Now.goingTo);
+      Now.goingTo.y += 1.3;
+    }
+    return floor;
+  }, [gltf]);
+
+  let colliderManager = useMemo(() => {
+    return new ColliderManager({ floor, scene: get().scene });
+  }, [floor]);
+
+  let o3d = new Object3D();
+
+  let metagraph = useRef();
+
   useEffect(() => {
-    let o3d = ref.current;
-
-    o3d.children.forEach((k) => {
-      o3d.remove(k);
-    });
-
-    influ.forEach((it) => {
-      if (it.type === "computeAttract") {
-        let geo = new SphereBufferGeometry(1, 32, 32);
-        let mesh = new Mesh(
-          geo,
-          new MeshBasicMaterial({
-            color: "#fff",
-            transparent: true,
-            opacity: 0.05,
-            wireframe: true,
-          })
-        );
-        o3d.add(mesh);
-        mini.onLoop(() => {
-          mesh.scale.setScalar(it.radius);
-          mesh.position.copy(it.position);
-        });
-      }
-
-      if (it.type === "computeSphere") {
-        let geo = new SphereBufferGeometry(1, 32, 32);
-        let mesh = new Mesh(
-          geo,
-          new MeshBasicMaterial({
-            color: "#00f",
-            transparent: true,
-            opacity: 0.3,
-            wireframe: true,
-          })
-        );
-        o3d.add(mesh);
-        mini.onLoop(() => {
-          mesh.scale.setScalar(it.radius);
-          mesh.position.copy(it.position);
-        });
-      }
-
-      if (it.type === "computeGravity") {
-        let mesh1 = new AxesHelper(5);
-        o3d.add(mesh1);
-      }
-
-      //
-    });
-
-    return () => {
-      o3d.children.forEach((k) => {
-        o3d.remove(k);
-      });
-    };
-
     //
-  }, [mini, influ]);
-  return <group ref={ref}></group>;
+    //
+    if (metagraph.current) {
+      floor
+        .getObjectByName("startAt")
+        .getWorldPosition(metagraph.current.position);
+      metagraph.current.position.x += -1;
+      metagraph.current.position.y += 1.3;
+      metagraph.current.position.z += -5;
+      metagraph.current.scale.setScalar(0.03);
+    }
+    //
+    //
+  }, []);
+
+  return (
+    <group rotation={[0, Math.PI * -1, 0]}>
+      <directionalLight intensity={3} position={[3, 3, 3]} />
+      <primitive object={o3d}></primitive>
+      {createPortal(<primitive object={floor}></primitive>, o3d)}
+
+      {createPortal(
+        <group visible={false}>
+          <primitive object={colliderManager.preview}></primitive>
+        </group>,
+        o3d
+      )}
+
+      {/* <PlayerCollider
+        Now={Now}
+        colliderMesh={colliderManager.collider}
+      ></PlayerCollider>
+
+      <PlayerDisplay
+        lookBack={true}
+        envMap={envMap}
+        Now={Now}
+        floor={floor}
+        isSwim={true}
+      ></PlayerDisplay> */}
+
+      {/*
+      <group ref={metagraph}>
+        <ForceGraphR3F></ForceGraphR3F>
+      </group> */}
+
+      {/* <WalkerFollowerControls floor={floor}></WalkerFollowerControls> */}
+    </group>
+  );
 }
