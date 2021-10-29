@@ -109,4 +109,4 @@ export default function Cabin(props) {
   );
 }
 
-useGLTF.preload("/map/capbin/cabin.glb");
+// useGLTF.preload("/map/capbin/cabin.glb");
