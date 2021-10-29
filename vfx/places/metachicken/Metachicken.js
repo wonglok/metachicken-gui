@@ -18,7 +18,7 @@ import { SkeletonUtils } from "three/examples/jsm/utils/SkeletonUtils";
 import { ColliderManager } from "../../classes/ColliderManager";
 import { PlayerCollider } from "../../canvas/PlayerCollider/PlayerCollider";
 import { Now } from "../../store/Now";
-import { SimpleBloomer } from "../../canvas/PostProcessing/SimpleBloomer";
+import { SimpleBloomerStrong } from "../../canvas/PostProcessing/SimpleBloomerStrong";
 import { StarSky } from "../../canvas/StarSky/StarSky";
 import { useEnvLight } from "../../utils/use-env-light";
 // import { WalkerFollowerControls } from "../../canvas/Controls/WalkerFollowerControls";
@@ -93,10 +93,13 @@ export default function Metachicken() {
           {/* <FunSimCom></FunSimCom> */}
 
           {/* <MapLoader></MapLoader> */}
-          {/* <SimpleBloomer></SimpleBloomer> */}
+          <SimpleBloomerStrong></SimpleBloomerStrong>
 
           <gridHelper
-            position={[0, -15, 0]}
+            userData={{
+              enableBloom: false,
+            }}
+            position={[0, -25, 0]}
             args={[1500, 50, "cyan", "cyan"]}
           />
 
@@ -140,7 +143,7 @@ function ChickenPlacement({ trackers }) {
 
           tt.position.lerp(v3, 0.015 * tt.userData.lerp * 2.0);
 
-          v3.multiplyScalar(1.1);
+          v3.multiplyScalar(1.5);
           tt.lookAt(v3.x, v3.y, v3.z);
 
           //
@@ -162,14 +165,17 @@ function ChickenPlacement({ trackers }) {
   return (
     <group ref={group}>
       <instancedMesh
+        userData={{ enableBloom: false }}
         name="body"
         args={[nodes.Mesh_0.geometry, materials.body, CHICKEN_COUNT]}
       />
       <instancedMesh
+        userData={{ enableBloom: false }}
         name="red"
         args={[nodes.Mesh_0_1.geometry, materials.red, CHICKEN_COUNT]}
       />
       <instancedMesh
+        userData={{ enableBloom: false }}
         name="yellow"
         args={[nodes.Mesh_0_2.geometry, materials.yellow, CHICKEN_COUNT]}
       />
@@ -207,7 +213,7 @@ function TrackerFly({ trackers }) {
   }, [trackers, trackers.length]);
 
   useFrame(() => {
-    sim.track({ trackers, lerp: 0.15 });
+    sim.track({ trackers, lerp: 0.1 });
   });
 
   return (

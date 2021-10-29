@@ -19,7 +19,7 @@ export function CabinVisual() {
 
 export default function Cabin(props) {
   const group = useRef(new Object3D());
-  const { nodes, materials } = useGLTF("/map/capbin/cabin.glb");
+  const { nodes, materials } = useGLTF("/map/capbin/cabin-v1.glb");
 
   let fk = new Camera();
   useFrame(({ camera }) => {
