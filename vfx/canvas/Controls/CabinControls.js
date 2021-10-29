@@ -75,14 +75,13 @@ function Keyboard({ camera }) {
   useEffect(() => {
     //
     let dom = document.createElement("div");
-    dom.innerHTML = "GAS!";
     dom.style.cssText = `
 
       position: absolute;
       zIndex: 1000;
       bottom: 15px;
       left: 15px;
-      background: white;
+      background: cyan;
       height: 100px;
       width: 100px;
       line-height: 100px;
@@ -90,12 +89,19 @@ function Keyboard({ camera }) {
       border-radius: 50%;
       user-select: none;
       touch-action: none;
+
+      opacity: 0.5;
     `;
 
-    dom.onpointerdown = () => {
+    dom.style.userSelect = "none";
+    get().gl.domElement.parentElement.style.userSelect = "none";
+
+    dom.onpointerdown = (ev) => {
+      ev.preventDefault();
       Now.keyW = true;
     };
-    dom.onpointerup = () => {
+    dom.onpointerup = (ev) => {
+      ev.preventDefault();
       Now.keyW = false;
     };
 
