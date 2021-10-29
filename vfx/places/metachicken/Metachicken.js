@@ -33,7 +33,7 @@ import { CabinControls } from "../../canvas/Controls/CabinControls";
 import { CabinVisual } from "./CabinVisual";
 import { TrackO3D } from "../fly/TrackO3D";
 
-const CHICKEN_COUNT = 256;
+const CHICKEN_COUNT = 64;
 
 export default function Metachicken() {
   let o3d = new Object3D();
@@ -49,7 +49,7 @@ export default function Metachicken() {
       o.position.x = Math.random() - 0.5;
       o.position.y = Math.random() - 0.5;
       o.position.z = Math.random() - 0.5;
-      o.position.multiplyScalar(50);
+      o.position.multiplyScalar(25);
 
       o.userData.lerp = Math.random();
       o.userData.oPos = o.position.clone();
@@ -68,7 +68,11 @@ export default function Metachicken() {
           <CabinControls Now={Now} higherCamera={2.0}>
             <pointLight intensity={30} position={[0, 1, 0]} />
 
-            <group name={"place"}>
+            <group
+              name={"place"}
+              position={[0, -0.15, 0.1]}
+              rotation={[-0.05 * Math.PI, 0, 0]}
+            >
               <CabinVisual></CabinVisual>
             </group>
 
@@ -86,7 +90,7 @@ export default function Metachicken() {
           {/* <FunSimCom></FunSimCom> */}
 
           {/* <MapLoader></MapLoader> */}
-          <SimpleBloomer></SimpleBloomer>
+          {/* <SimpleBloomer></SimpleBloomer> */}
 
           <gridHelper
             position={[0, -15, 0]}
@@ -125,9 +129,10 @@ function ChickenPlacement({ trackers }) {
           chickensCentral.getWorldPosition(v3);
           v3.add(tt.userData.oPos);
 
-          tt.position.lerp(v3, 0.03);
+          tt.position.lerp(v3, 0.03 + 0.01 * tt.userData.lerp);
 
-          tt.lookAt(v3);
+          tt.lookAt(v3.x, v3.y, v3.z);
+
           tt.rotation.y += Math.PI;
 
           body.setMatrixAt(idx, tt.matrix);
@@ -181,7 +186,7 @@ function TrackerFly({ trackers }) {
   let sim = useMemo(() => {
     return new TrackO3D({
       node: mini,
-      tailLength: 32, // 512, 1024
+      tailLength: 128, // 512, 1024
       howManyTrackers: trackers.length,
     });
   }, [trackers, trackers.length]);
