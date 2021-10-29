@@ -89,12 +89,18 @@ function Keyboard({ camera }) {
       border-radius: 50%;
       user-select: none;
       touch-action: none;
-
+      user-select: none; /* supported by Chrome and Opera */
+      -webkit-user-select: none; /* Safari */
+      -khtml-user-select: none; /* Konqueror HTML */
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
       opacity: 0.5;
     `;
 
     dom.style.userSelect = "none";
-    get().gl.domElement.parentElement.style.userSelect = "none";
+    get().gl.domElement.style.userSelect = "none";
+    dom.style.touchAction = "none";
+    get().gl.domElement.style.touchAction = "none";
 
     dom.onpointerdown = (ev) => {
       ev.preventDefault();

@@ -93,7 +93,7 @@ export default function Metachicken() {
           {/* <FunSimCom></FunSimCom> */}
 
           {/* <MapLoader></MapLoader> */}
-          <SimpleBloomerStrong></SimpleBloomerStrong>
+          {/* <SimpleBloomerStrong></SimpleBloomerStrong> */}
 
           <gridHelper
             userData={{
