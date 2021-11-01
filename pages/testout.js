@@ -35,14 +35,14 @@ export default function Page() {
   return (
     <div className="full">
       <style>
-        {`
-
-        html,body,#__next,.full{
-          height: 100%;
-          width: 100%;
+        {
+          /* css */ `
+          html,body,#__next,.full{
+            height: 100%;
+            width: 100%;
+          }
+        `
         }
-
-        `}
       </style>
       {!url && (
         <div>
@@ -53,6 +53,7 @@ export default function Page() {
                 files: [first],
               },
             }) => {
+              //
               setURL(URL.createObjectURL(first));
             }}
           ></input>
