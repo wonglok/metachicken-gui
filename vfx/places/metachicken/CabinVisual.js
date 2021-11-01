@@ -64,31 +64,23 @@ export default function Cabin(props) {
   return (
     <group ref={group} {...props} dispose={null}>
       <mesh
-        castShadow
-        receiveShadow
         userData={{}}
         geometry={nodes.cabin.geometry}
         material={nodes.cabin.material}
         position={[0, 0.96, -0.1]}
       />
       <mesh
-        castShadow
-        receiveShadow
         name="joystick"
         geometry={nodes.joystick.geometry}
         material={nodes.joystick.material}
         position={[0, 0.47, -0.59]}
       />
       <mesh
-        castShadow
-        receiveShadow
         geometry={nodes["fly-ctrl"].geometry}
         material={nodes["fly-ctrl"].material}
         position={[0.48, 0.81, -0.94]}
       />
       <mesh
-        castShadow
-        receiveShadow
         userData={{
           enableBloom: true,
         }}
@@ -97,8 +89,6 @@ export default function Cabin(props) {
         position={[0, 0.96, -0.1]}
       />
       <mesh
-        castShadow
-        receiveShadow
         geometry={nodes.Cube.geometry}
         material={materials.thecross}
         position={[0.22, 1.06, -0.93]}
